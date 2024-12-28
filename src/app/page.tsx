@@ -3,8 +3,8 @@
 import React, { useState, useReducer } from 'react';
 import { GameManager } from './GameManager';
 
-const GRID_SIZE = 3; // グリッドサイズ
-const MAX_SEQUENCE = 10; // 最大シーケンス数
+const GRID_SIZE: number = 3; // グリッドサイズ
+const MAX_SEQUENCE: number = 10; // 最大シーケンス数
 
 export default function Home() {
   const [highlightedCells, setHighlightedCells] = useState<number[]>([]);
@@ -22,7 +22,11 @@ export default function Home() {
 
   // グリッドのクラス名を取得
   const getGridColsClassName = () => {
-    return GRID_SIZE === 3 ? 'grid-cols-3' : GRID_SIZE === 4 ? 'grid-cols-4' : 'grid-cols-5';
+    if (GRID_SIZE === 2) return 'grid-cols-2';
+    if (GRID_SIZE === 3) return 'grid-cols-3';
+    if (GRID_SIZE === 4) return 'grid-cols-4';
+    if (GRID_SIZE === 5) return 'grid-cols-5';
+    return 'grid-cols-5';
   };
 
   return (
@@ -33,7 +37,7 @@ export default function Home() {
           {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, index) => (
             <button
               key={index}
-              className={`w-16 h-16 rounded-md ${
+              className={`w-16 h-16 rounded-md text-3xl ${
                 highlightedCells.includes(index) ? 'bg-blue-500' : 'bg-gray-200'
               }`}
               onClick={() => handleCellClick(index)}
