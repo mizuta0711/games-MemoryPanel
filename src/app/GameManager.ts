@@ -142,7 +142,7 @@ export class GameManager {
 
     // sequenceの要素数がgridSize*gridSizeよりも大きい場合、端数を切り出す
     // 端数を求める
-    const remainder = this.sequence.length % maxCells;
+    let remainder = this.sequence.length % maxCells;
     let usedSequence = (remainder === 0) ? [] : this.sequence.slice(-remainder);
 
     // 重複しない番号を生成
