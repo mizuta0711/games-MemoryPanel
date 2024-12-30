@@ -79,10 +79,11 @@ export default function Home() {
               <p>難易度に応じた規定レベルに到達するとゲームクリアです。</p>
               <br />
               <p>【難易度】</p>
-              <p>イージー：2×2のパネル、最大5レベル、速度は遅い</p>
-              <p>ノーマル：3×3のパネル、最大10レベル、速度は普通</p>
-              <p>ハード：4×4のパネル、最大15レベル、速度は速い</p>
-              <p>エキスパート：5×5のパネル、最大20レベル、速度はめっちゃ速い</p>
+              <p>かんたん：2×2のパネル、最大4レベル、速度は遅い</p>
+              <p>ふつう：3×3のパネル、最大9レベル、速度は普通</p>
+              <p>むずかしい：4×4のパネル、最大16レベル、速度は速い</p>
+              <p>とてもむずかしい：5×5のパネル、最大25レベル、速度はめっちゃ速い</p>
+              <p>おに：5×5のパネル、最大50レベル、速度は鬼</p>
             </div>
           )}
         </div>
@@ -96,10 +97,11 @@ export default function Home() {
             className="px-2 py-1 border rounded"
             disabled={gameManager.isPlaying}
           >
-            <option value="easy">イージー</option>
-            <option value="normal">ノーマル</option>
-            <option value="hard">ハード</option>
-            <option value="expert">エキスパート</option>
+            <option value="easy">かんたん</option>
+            <option value="normal">ふつう</option>
+            <option value="hard">むずかしい</option>
+            <option value="expert">とてもむずかしい</option>
+            <option value="oni">おに</option>
           </select>
         </div>
 

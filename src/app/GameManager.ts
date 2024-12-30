@@ -59,7 +59,7 @@ export class GameManager {
         return this.gridSize;
     }
 
-    // 難易度に応じたタイミングを取得
+    // 難易度に応じた表示タイミングを取得
     private getDifficultyTiming(difficulty: GameDifficulty): number {
         switch (difficulty) {
             case 'easy':
@@ -70,6 +70,8 @@ export class GameManager {
                 return 500;
             case 'expert':
                 return 250;
+            case 'oni':
+                return 100;
             default:
                 return 1000;
         }
@@ -86,6 +88,8 @@ export class GameManager {
                 return 4;
             case 'expert':
                 return 5;
+            case 'oni':
+                return 5;
             default:
                 return 4;
         }
@@ -95,13 +99,15 @@ export class GameManager {
     private getDifficultyMaxSequence(difficulty: GameDifficulty): number {
         switch (difficulty) {
             case 'easy':
-                return 5;
+                return 4;
             case 'normal':
-                return 10;
+                return 9;
             case 'hard':
-                return 15;
+                return 16;
             case 'expert':
-                return 20;
+                return 25;
+            case 'oni':
+                return 50;
             default:
                 return 10;
         }

@@ -1,1 +1,1 @@
-export type GameDifficulty = 'easy' | 'normal' | 'hard' | 'expert';
+export type GameDifficulty = 'easy' | 'normal' | 'hard' | 'expert' | 'oni';
