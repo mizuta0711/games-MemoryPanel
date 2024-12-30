@@ -55,10 +55,10 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center py-2">
-      <main className="flex w-full flex-1 flex-col items-center px-20 text-center">
-        <h1 className="text-4xl font-bold mb-8">パネル暗記ゲーム</h1>
+      <main className="flex w-full flex-1 flex-col items-center text-center">
+        <h1 className="text-2xl font-bold mb-4">パネル暗記ゲーム</h1>
 
-        <div className="mb-4">
+        <div className="mb-2">
           <button
             onClick={() => setShowInstructions(!showInstructions)}
             className="mb-2 p-2 bg-green-500 text-white rounded"
@@ -68,7 +68,7 @@ export default function Home() {
 
           {showInstructions && (
             <div className="p-4 border rounded bg-gray-100 text-left">
-              <h2 className="text-xl font-bold mb-2">遊び方</h2>
+              <h2 className="text-ml font-bold mb-2">遊び方</h2>
               <p>パネルの光った順番を暗記するゲームです。</p>
               <p>「開始する」を押すと、パネルが順番に光ります。</p>
               <p>光ったパネルの順番通りに、パネルを押してください。</p>
