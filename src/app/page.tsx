@@ -4,8 +4,6 @@ import React, { useState, useReducer } from 'react';
 import { GameManager } from './GameManager';
 import { GameDifficulty } from './types';
 
-const MAX_SEQUENCE: number = 10; // 最大シーケンス数
-
 export default function Home() {
   /**
    * 操作方法（遊び方）の表示状態を管理するフラグ。
