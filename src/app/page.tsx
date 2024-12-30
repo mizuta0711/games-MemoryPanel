@@ -34,7 +34,7 @@ export default function Home() {
   const handleDifficultyChange = (newDifficulty: GameDifficulty) => {
     setDifficulty(newDifficulty);
     setGameManager(initializeGameManager(newDifficulty));
-    
+
     // 難易度に応じグリッドサイズに表示を変更
     setGridSize(gameManager.getDifficultyGridSize(newDifficulty));
   };
@@ -58,14 +58,43 @@ export default function Home() {
       <main className="flex w-full flex-1 flex-col items-center text-center">
         <h1 className="text-2xl font-bold mb-4">パネル暗記ゲーム</h1>
 
-        <div className="mb-2">
+        {/* 難易度選択 */}
+        <div className="mb-4 space-x-2">
+          <label className="mr-2">難易度:</label>
+          <select
+            value={difficulty}
+            onChange={(e) => handleDifficultyChange(e.target.value as GameDifficulty)}
+            className="px-2 py-1 border rounded"
+            disabled={gameManager.isPlaying}
+          >
+            <option value="easy">かんたん</option>
+            <option value="normal">ふつう</option>
+            <option value="hard">むずかしい</option>
+            <option value="expert">とてもむずかしい</option>
+            <option value="oni">おに</option>
+          </select>
+        </div>
+
+        <div className="flex items-center mb-4">
+          {/* 遊び方ボタン */}
           <button
             onClick={() => setShowInstructions(!showInstructions)}
-            className="mb-2 p-2 bg-green-500 text-white rounded"
+            className="px-4 py-2 bg-green-500 text-white rounded-md"
           >
             {showInstructions ? '遊び方を隠す' : '遊び方を見る'}
           </button>
 
+          {/* 開始ボタン */}
+          <button
+            className="px-4 py-2 bg-green-500 text-white rounded-md ml-2"
+            onClick={() => gameManager.startGame()}
+          >
+            {gameManager.isPlaying ? '再挑戦する' : '開始する'}
+          </button>
+        </div>
+
+        {/* 遊び方 */}
+        <div className="mb-2">
           {showInstructions && (
             <div className="p-4 border rounded bg-gray-100 text-left">
               <h2 className="text-ml font-bold mb-2">遊び方</h2>
@@ -86,31 +115,6 @@ export default function Home() {
           )}
         </div>
 
-        {/* 難易度選択 */}
-        <div className="mb-4 space-x-2">
-          <label className="mr-2">難易度:</label>
-          <select
-            value={difficulty}
-            onChange={(e) => handleDifficultyChange(e.target.value as GameDifficulty)}
-            className="px-2 py-1 border rounded"
-            disabled={gameManager.isPlaying}
-          >
-            <option value="easy">かんたん</option>
-            <option value="normal">ふつう</option>
-            <option value="hard">むずかしい</option>
-            <option value="expert">とてもむずかしい</option>
-            <option value="oni">おに</option>
-          </select>
-        </div>
-
-        {/* 開始ボタン */}
-        <button
-          className="px-4 py-2 bg-green-500 text-white rounded-md mb-8"
-          onClick={() => gameManager.startGame()}
-        >
-          {gameManager.isPlaying ? '再挑戦する' : '開始する'}
-        </button>
-
         {/* メッセージ */}
         <p className="text-xl mb-4">
           {gameManager.isPlaying == false ? (
@@ -121,7 +125,7 @@ export default function Home() {
         </p>
 
         {/* パネル */}
-        <div className={`grid gap-2 mb-8 ${getGridColsClassName()}`}>
+        <div className={`grid gap-2 mb-4 ${getGridColsClassName()}`}>
           {Array.from({ length: gridSize * gridSize }).map((_, index) => (
             <button
               key={index}
@@ -136,7 +140,7 @@ export default function Home() {
         </div>
 
         {/* レベル表示 */}
-        <p className="text-2xl mb-4">
+        <p className="text-xl">
           {gameManager.sequence.length > 0 ? (
             gameManager.isGameOver
               ? `ゲームオーバー! スコア: ${gameManager.sequence.length - 1}`
