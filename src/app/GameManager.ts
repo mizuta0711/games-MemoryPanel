@@ -4,6 +4,18 @@ type HighlightCallback = (cells: number[]) => void;
 type GameUpdateCallback = () => void;
 
 /**
+ * 難易度に応じたゲーム設定
+ * @type {Object.<GameDifficulty, {timing: number, gridSize: number, sequences: number}>}
+ */
+const DIFFICULTY_SETTINGS = {
+    easy: { timing: 1500, gridSize: 2, sequences: 4 },
+    normal: { timing: 1000, gridSize: 3, sequences: 9 },
+    hard: { timing: 500, gridSize: 4, sequences: 16 },
+    expert: { timing: 250, gridSize: 5, sequences: 25 },
+    oni: { timing: 100, gridSize: 5, sequences: 50 },
+}
+
+/**
  * GameManagerクラスは、メモリーゲームのロジックを管理します。
  * プレイヤーは、表示されたシーケンスを記憶し、同じ順序で入力する必要があります。
  * ゲームは、シーケンスが正しく入力されるたびに次のラウンドに進みます。
@@ -43,15 +55,16 @@ export class GameManager {
         highlightCallback: HighlightCallback,
         gameUpdateCallback: GameUpdateCallback
     ) {
-        this.gridSize = this.getDifficultyGridSize(difficulty);
-        this.maxSequence = this.getDifficultyMaxSequence(difficulty);
+        const { timing, gridSize, sequences } = DIFFICULTY_SETTINGS[difficulty]
+        this.gridSize = gridSize;
+        this.maxSequence = sequences;
         this.highlightCallback = highlightCallback;
         this.gameUpdateCallback = gameUpdateCallback;
         this.difficulty = difficulty;
 
         // 難易度に応じてタイミングを調整
-        this.HIGH_LIGHT_INTERVAL = this.getDifficultyTiming(difficulty);
-        this.HIGH_LIGHT_DURATION = this.getDifficultyTiming(difficulty) * 0.75;
+        this.HIGH_LIGHT_INTERVAL = timing;
+        this.HIGH_LIGHT_DURATION = timing * 0.75;
     }
 
     // グリッドサイズを取得
@@ -59,58 +72,9 @@ export class GameManager {
         return this.gridSize;
     }
 
-    // 難易度に応じた表示タイミングを取得
-    private getDifficultyTiming(difficulty: GameDifficulty): number {
-        switch (difficulty) {
-            case 'easy':
-                return 1500;
-            case 'normal':
-                return 1000;
-            case 'hard':
-                return 500;
-            case 'expert':
-                return 250;
-            case 'oni':
-                return 100;
-            default:
-                return 1000;
-        }
-    }
-
     // 難易度に応じたグリッドサイズを取得
     getDifficultyGridSize(difficulty: GameDifficulty): number {
-        switch (difficulty) {
-            case 'easy':
-                return 2;
-            case 'normal':
-                return 3;
-            case 'hard':
-                return 4;
-            case 'expert':
-                return 5;
-            case 'oni':
-                return 5;
-            default:
-                return 4;
-        }
-    }
-
-    // 難易度に応じたシーケンス数を取得
-    private getDifficultyMaxSequence(difficulty: GameDifficulty): number {
-        switch (difficulty) {
-            case 'easy':
-                return 4;
-            case 'normal':
-                return 9;
-            case 'hard':
-                return 16;
-            case 'expert':
-                return 25;
-            case 'oni':
-                return 50;
-            default:
-                return 10;
-        }
+        return DIFFICULTY_SETTINGS[difficulty].gridSize;
     }
 
     /**
@@ -145,7 +109,7 @@ export class GameManager {
      * @param index プレイヤーが入力したセルのインデックス
      */
     handlePlayerInput(index: number): void {
-        if (this.isHilighting || this.isGameOver) return;
+        if (!this.isPlaying || this.isHilighting || this.isGameOver) return;
 
         // ハイライト中のセルは無視（重複入力を防ぐ）
         if (this.highlightedCells.includes(index)) return;
