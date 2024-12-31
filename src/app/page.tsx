@@ -10,13 +10,40 @@ export default function Home() {
    * trueの場合、遊び方が表示されます。
    * @type {boolean}
    */
-  const [showInstructions, setShowInstructions] = useState(false)
-  const [difficulty, setDifficulty] = useState<GameDifficulty>('normal');
-  const [gridSize, setGridSize] = useState(3);
-  const [highlightedCells, setHighlightedCells] = useState<number[]>([]);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0); // 強制再描画
+  const [showInstructions, setShowInstructions] = useState(false);
 
-  // GameManager のインスタンスを作成
+  /**
+   * 現在選択されているゲームの難易度。
+   * @type {GameDifficulty} 'easy' | 'normal' | 'hard' | 'expert' | 'oni'
+   */
+  const [difficulty, setDifficulty] = useState<GameDifficulty>('normal');
+
+  /**
+   * 現在のグリッドサイズを管理。
+   * 難易度によって2×2, 3×3など異なります。
+   * @type {number}
+   */
+  const [gridSize, setGridSize] = useState(3);
+
+  /**
+   * 現在ハイライトされているセルのインデックスを保持。
+   * ハイライトされたセルは視覚的に光るように表示されます。
+   * @type {number[]}
+   */
+  const [highlightedCells, setHighlightedCells] = useState<number[]>([]);
+
+  /**
+   * コンポーネントを強制的に再描画するためのフック。
+   * 値は利用せず、ディスパッチ関数を用いて描画をトリガーします。
+   */
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  /**
+   * GameManager のインスタンスを初期化する関数。
+   * 難易度、ハイライト状態管理関数、再描画関数を渡して生成します。
+   * @param {GameDifficulty} difficulty - 選択されたゲーム難易度。
+   * @returns {GameManager} 初期化された GameManager のインスタンス。
+   */
   const initializeGameManager = (difficulty: GameDifficulty) => {
     return new GameManager(
       difficulty,
@@ -25,26 +52,41 @@ export default function Home() {
     );
   };
 
-  // GameManagerのステート管理
+  /**
+   * GameManager のインスタンスを管理。
+   * 難易度変更時や初期化時に再生成されます。
+   * @type {GameManager}
+   */
   const [gameManager, setGameManager] = useState(() =>
     initializeGameManager(difficulty)
   );
 
-  // 難易度変更時の処理
+  /**
+   * 難易度変更時の処理。
+   * 新しい難易度に基づき GameManager を再生成し、グリッドサイズを更新します。
+   * @param {GameDifficulty} newDifficulty - 新しく選択された難易度。
+   */
   const handleDifficultyChange = (newDifficulty: GameDifficulty) => {
     setDifficulty(newDifficulty);
     setGameManager(initializeGameManager(newDifficulty));
 
-    // 難易度に応じグリッドサイズに表示を変更
+    // 難易度に応じてグリッドサイズを変更
     setGridSize(gameManager.getDifficultyGridSize(newDifficulty));
   };
 
-  // ボタンクリック時の処理
+  /**
+   * プレイヤーがセルをクリックしたときの処理。
+   * GameManager を通じて入力を処理します。
+   * @param {number} index - クリックされたセルのインデックス。
+   */
   const handleCellClick = (index: number) => {
     gameManager.handlePlayerInput(index);
   };
 
-  // グリッドのクラス名を取得
+  /**
+   * 現在のグリッドサイズに応じた CSS クラス名を取得。
+   * @returns {string} グリッド列数を表すクラス名。
+   */
   const getGridColsClassName = () => {
     if (gridSize === 2) return 'grid-cols-2';
     if (gridSize === 3) return 'grid-cols-3';
@@ -98,19 +140,7 @@ export default function Home() {
           {showInstructions && (
             <div className="p-4 border rounded bg-gray-100 text-left">
               <h2 className="text-ml font-bold mb-2">遊び方</h2>
-              <p>パネルの光った順番を暗記するゲームです。</p>
-              <p>「開始する」を押すと、パネルが順番に光ります。</p>
-              <p>光ったパネルの順番通りに、パネルを押してください。</p>
-              <p>押したパネルの順番が正しければ正解で、間違えるとゲームオーバーになります。</p>
-              <p>最初はレベル１からスタートして、正解すればレベルが１上がります。</p>
-              <p>難易度に応じた規定レベルに到達するとゲームクリアです。</p>
-              <br />
-              <p>【難易度】</p>
-              <p>かんたん：2×2のパネル、最大4レベル、速度は遅い</p>
-              <p>ふつう：3×3のパネル、最大9レベル、速度は普通</p>
-              <p>むずかしい：4×4のパネル、最大16レベル、速度は速い</p>
-              <p>とてもむずかしい：5×5のパネル、最大25レベル、速度はめっちゃ速い</p>
-              <p>おに：5×5のパネル、最大50レベル、速度は鬼</p>
+              {/* 遊び方説明 */}
             </div>
           )}
         </div>
